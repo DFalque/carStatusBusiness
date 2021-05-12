@@ -63,9 +63,9 @@ const WelcomeScreen = props => {
   return (
     <View>
       <View>
-        <Text>Comienza una nueva Aventura</Text>
+        <Text>Registrate</Text>
       </View>
-      <View>
+      <View style={styles.container}>
         <View></View>
         <View>
           <TextInput
@@ -94,3 +94,12 @@ const WelcomeScreen = props => {
 };
 
 export default WelcomeScreen;
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    alignItems: 'center',
+    alignContent: 'center',
+    justifyContent: 'center',
+  },
+});
