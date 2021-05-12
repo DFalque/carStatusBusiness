@@ -1,0 +1,69 @@
+{
+  "project_info": {
+    "project_number": "622947941775",
+    "firebase_url": "https://statuscar-9cd8a-default-rtdb.europe-west1.firebasedatabase.app",
+    "project_id": "statuscar-9cd8a",
+    "storage_bucket": "statuscar-9cd8a.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:622947941775:android:a8696a72aaea27e2a31ffa",
+        "android_client_info": {
+          "package_name": "com.carstatus"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "622947941775-a2uiusefbacp142sgrcq2bq2pt0m168j.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDjq-x_RjO5efslnAl0VXGrt11-a--7er4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "622947941775-a2uiusefbacp142sgrcq2bq2pt0m168j.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:622947941775:android:fee6391b43fe31c1a31ffa",
+        "android_client_info": {
+          "package_name": "com.statuscarinc"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "622947941775-a2uiusefbacp142sgrcq2bq2pt0m168j.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDjq-x_RjO5efslnAl0VXGrt11-a--7er4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "622947941775-a2uiusefbacp142sgrcq2bq2pt0m168j.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

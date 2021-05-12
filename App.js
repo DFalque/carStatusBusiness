@@ -1,13 +1,5 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- *
- * @format
- * @flow strict-local
- */
-
-import React from 'react';
-import type {Node} from 'react';
+//COMPONENTS
+import React, {useState, useEffect} from 'react';
 import {
   SafeAreaView,
   ScrollView,
@@ -26,87 +18,96 @@ import {
   ReloadInstructions,
 } from 'react-native/Libraries/NewAppScreen';
 
-const Section = ({children, title}): Node => {
-  const isDarkMode = useColorScheme() === 'dark';
+// NAVIGATOR
+import {createStackNavigator} from '@react-navigation/stack';
+//import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
+import {NavigationContainer} from '@react-navigation/native';
+// SCREENS LOGIN
+import WelcomeScreen from './src/screens/login/WelcomeScreen';
+import Login from './src/screens/login//Login';
+import SignUp from './src/screens/login/SignUp';
+// FIREBASE
+import {firebase} from '@react-native-firebase/database';
+import firebaseConfig from './database/firebase';
+import auth from '@react-native-firebase/auth';
+
+//VARIABLES
+//let deviceWidth = Dimensions.get('window').width;
+//let deviceHeight = Dimensions.get('window').height;
+
+if (!firebase.apps.length) {
+  console.log('dentro de inicializando app con firebase');
+  firebase.initializeApp(firebaseConfig);
+}
+
+// SCREENS MAIN
+import Home from './src/screens/main/Home';
+
+//CREATE LOGIN STACK
+const LoginStack = createStackNavigator();
+
+const LoginStackScreen = () => {
   return (
-    <View style={styles.sectionContainer}>
-      <Text
-        style={[
-          styles.sectionTitle,
-          {
-            color: isDarkMode ? Colors.white : Colors.black,
-          },
-        ]}>
-        {title}
-      </Text>
-      <Text
-        style={[
-          styles.sectionDescription,
-          {
-            color: isDarkMode ? Colors.light : Colors.dark,
-          },
-        ]}>
-        {children}
-      </Text>
-    </View>
+    <LoginStack.Navigator
+      initialRouteName="Welcome"
+      screenOptions={{headerShown: false}}
+      tabBarOption={{}}>
+      <LoginStack.Screen
+        name="Welcome"
+        component={WelcomeScreen}
+        Options={{}}
+      />
+      <LoginStack.Screen name="SignUp" component={SignUp} Options={{}} />
+      <LoginStack.Screen name="Login" component={Login} Options={{}} />
+    </LoginStack.Navigator>
   );
 };
 
-const App: () => Node = () => {
-  const isDarkMode = useColorScheme() === 'dark';
+// CREATE MAIN STACK
 
-  const backgroundStyle = {
-    backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
-  };
+const MainStack = createStackNavigator();
 
+const MainStackScreen = () => {
   return (
-    <SafeAreaView style={backgroundStyle}>
-      <StatusBar barStyle={isDarkMode ? 'light-content' : 'dark-content'} />
-      <ScrollView
-        contentInsetAdjustmentBehavior="automatic"
-        style={backgroundStyle}>
-        <Header />
-        <View
-          style={{
-            backgroundColor: isDarkMode ? Colors.black : Colors.white,
-          }}>
-          <Section title="Step One">
-            Edit <Text style={styles.highlight}>App.js</Text> to change this
-            screen and then come back to see your edits.
-          </Section>
-          <Section title="See Your Changes">
-            <ReloadInstructions />
-          </Section>
-          <Section title="Debug">
-            <DebugInstructions />
-          </Section>
-          <Section title="Learn More">
-            Read the docs to discover what to do next:
-          </Section>
-          <LearnMoreLinks />
-        </View>
-      </ScrollView>
-    </SafeAreaView>
+    <MainStack.Navigator
+      initialRouteName="Home"
+      screenOptions={{headerShown: false}}
+      tabBarOption={{}}>
+      <LoginStack.Screen name="Home" component={Home} Options={{}} />
+    </MainStack.Navigator>
   );
 };
 
-const styles = StyleSheet.create({
-  sectionContainer: {
-    marginTop: 32,
-    paddingHorizontal: 24,
-  },
-  sectionTitle: {
-    fontSize: 24,
-    fontWeight: '600',
-  },
-  sectionDescription: {
-    marginTop: 8,
-    fontSize: 18,
-    fontWeight: '400',
-  },
-  highlight: {
-    fontWeight: '700',
-  },
-});
+export default function App() {
+  const [initializing, setInitializing] = useState(true);
+  const [user, setUser] = useState();
 
-export default App;
+  // Handle user state changes
+  function onAuthStateChanged(user) {
+    setUser(user);
+    if (initializing) setInitializing(false);
+  }
+
+  useEffect(() => {
+    const subscriber = auth().onAuthStateChanged(onAuthStateChanged);
+    return subscriber; // unsubscribe on unmount
+  }, []);
+
+  if (initializing) return null;
+
+  if (!user) {
+    return (
+      <NavigationContainer>
+        <LoginStackScreen />
+      </NavigationContainer>
+    );
+  }
+
+  return (
+    <NavigationContainer>
+      <MainStackScreen />
+    </NavigationContainer>
+  );
+}
+
+const styles = StyleSheet.create({});
