@@ -10,6 +10,7 @@ import {
 //FIREBASE
 import auth from '@react-native-firebase/auth';
 import database from '@react-native-firebase/database';
+import firestore from '@react-native-firebase/firestore';
 
 const WelcomeScreen = props => {
   const {navigation} = props;
@@ -28,20 +29,16 @@ const WelcomeScreen = props => {
   };
 
   const onSubmit = () => {
-    console.log(formData.email);
-    //console.log(validationEmail(formData.email));
-    //readFalse();
-    console.log('dentro del submit');
     auth()
       .createUserWithEmailAndPassword(formData.email, formData.password)
       .then(response => {
         console.log(response);
         const id = response.user.uid;
-        console.log(id);
-        database()
-          .ref('/users/' + response.user.uid)
+        firestore()
+          .collection('Workshop')
+          .doc(id)
           .set({
-            car: false,
+            clients: [],
           })
           .then(() => {
             console.log('Data updated.');
@@ -65,9 +62,9 @@ const WelcomeScreen = props => {
       <View>
         <Text>Registrate</Text>
       </View>
-      <View style={styles.container}>
-        <View></View>
+      <View>
         <View>
+          <Text>Registrate</Text>
           <TextInput
             underlineColorAndroid="transparent"
             placeholder="Email"
@@ -76,7 +73,7 @@ const WelcomeScreen = props => {
             onChangeText={e => onChange(e, 'email')}
           />
           <TextInput
-            underlineColorAndroid="transparent"
+            //underlineColorAndroid="transparent"
             placeholder="Contraseña"
             placeholderTextColor="grey"
             autoCapitalize="none"

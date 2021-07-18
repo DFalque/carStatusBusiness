@@ -12,14 +12,15 @@ const Home = props => {
   const [username, setUsername] = useState('');
 
   const changeState = e => {
+    console.log(e);
     //setUsername(e);
-    setUsername('FSteWQp3aERq2BnueWFL2QYFpIC3');
+    setUsername('oAgphnNeMsXEQiYGiJKzQILAWrW2');
     console.log(username);
   };
 
   const pressButton = () => {
     navigation.navigate('InfoCar', {
-      user: 'FSteWQp3aERq2BnueWFL2QYFpIC3',
+      user: 'oAgphnNeMsXEQiYGiJKzQILAWrW2',
     });
   };
   return (

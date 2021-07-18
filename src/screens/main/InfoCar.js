@@ -28,6 +28,18 @@ const InfoCar = ({route, navigation}) => {
       });
   }, []);
 
+  const changeStatus = () => {
+    const user = route.params.user;
+    database()
+      .ref('/users/' + user)
+      .update({
+        status: 'ok',
+      })
+      .then(() => {
+        console.log('Data updated.');
+      });
+  };
+
   return (
     <View style={styles.container}>
       <Text>Información del vehículo </Text>
