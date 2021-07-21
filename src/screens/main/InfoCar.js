@@ -2,62 +2,127 @@ import React, {useState, useEffect} from 'react';
 import {
   View,
   Text,
-  TextInput,
   TouchableOpacity,
   StyleSheet,
+  ImageBackground,
+  FlatList,
+  TextInput,
 } from 'react-native';
-import database from '@react-native-firebase/database';
+//import database from '@react-native-firebase/database';
+import firestore from '@react-native-firebase/firestore';
+import FlatListButton from '../../components/FlatListButton';
+import * as Progress from 'react-native-progress';
+
+const dataButtons = [
+  {id: 1, name: 'Información'},
+  {id: 2, name: 'Historial'},
+  {id: 3, name: 'Reparaciones'},
+  {id: 4, name: 'Pendiente'},
+  {id: 5, name: 'Facturas'},
+];
 
 const InfoCar = ({route, navigation}) => {
   console.log(route.params);
-  const [carInfo, setCarInfo] = useState('');
+  const [carInfo, setCarInfo] = useState({});
+  const [idCar, setIdCar] = useState('');
+  const [repairing, setRepairing] = useState(false);
+  const [notes, setNotes] = useState(['Esto es una nota', 'Esto es otra nota']);
+
+  const user = route.params.user;
+  const img = require('../../img/audi.jpg');
 
   useEffect(() => {
-    let obj = [];
-    const user = route.params.user;
+    console.log('Este es el usuario');
     console.log(user);
-    database()
-      .ref('/users/' + user)
-      .once('value')
-      .then(snapshot => {
-        let data = snapshot.val();
-        obj.push(data.info);
-        const [item] = obj;
-        console.log(item); //salida correcta
-        setCarInfo(item);
+    firestore()
+      .collection('Cars')
+      .where('number', '==', user)
+      .get()
+      .then(doc => {
+        console.log('Dentro de firestore');
+        console.log(doc._docs);
+        setIdCar(doc._docs[0].id);
+        const car = doc._docs[0].data();
+        setCarInfo(car);
       });
   }, []);
 
+  const handleNotes = e => {
+    setNotes(e);
+    console.log(notes);
+  };
+
+  const handleEventCar = () => {
+    navigation.navigate('EventCar');
+  };
+
   const changeStatus = () => {
-    const user = route.params.user;
-    database()
-      .ref('/users/' + user)
-      .update({
-        status: 'ok',
-      })
-      .then(() => {
-        console.log('Data updated.');
-      });
+    if (!repairing) {
+      firestore()
+        .collection('Cars')
+        .doc(idCar)
+        .update({
+          status: 'Repairing',
+        })
+        .then(() => {
+          console.log('Car is repairing!');
+          setRepairing(!repairing);
+        });
+    } else {
+      firestore()
+        .collection('Cars')
+        .doc(idCar)
+        .update({
+          status: 'Ready',
+        })
+        .then(() => {
+          console.log('Car Ready!');
+          setRepairing(!repairing);
+        });
+    }
   };
 
   return (
     <View style={styles.container}>
-      <Text>Información del vehículo </Text>
-
-      <View style={styles.containerText}>
-        <Text>Marca: </Text>
-        <Text>{carInfo.car}</Text>
+      <Text style={styles.tittle}>{carInfo.model}</Text>
+      <View style={styles.containerImg}>
+        <ImageBackground source={img} style={styles.image}></ImageBackground>
       </View>
+      <FlatList
+        style={styles.flatlist}
+        data={dataButtons}
+        horizontal={true}
+        renderItem={({item}) => <FlatListButton data={item} />}
+        keyExtractor={item => item.id}
+      />
       <View style={styles.containerText}>
-        <Text>Modelo: </Text>
-        <Text>{carInfo.model}</Text>
+        <Text>Introduce tus notas</Text>
+        <TextInput
+          placeholder="Nota ..."
+          style={styles.placeholder}
+          onChange={e => handleNotes()}
+        />
+        {notes.map(nota => (
+          <Text>{nota}</Text>
+        ))}
       </View>
-      <View style={styles.containerText}>
-        <Text>Fuel: </Text>
-        <Text>{carInfo.oil}</Text>
+      <View
+        style={{width: '80%', alignSelf: 'center', justifyContent: 'center'}}>
+        {repairing ? (
+          <Progress.Bar progress={0.3} width={300} color={'red'} />
+        ) : (
+          <Progress.Bar progress={1} width={300} color={'green'} />
+        )}
       </View>
-      <TouchableOpacity style={styles.button} onPress={() => pressButton()}>
-        <Text style={{color: 'white'}}> Iniciar reparación </Text>
+      <TouchableOpacity style={styles.button} onPress={() => changeStatus()}>
+        <Text style={{color: 'white'}}>
+          {repairing ? 'Parar reparación' : 'Iniciar Reparación'}{' '}
+        </Text>
+      </TouchableOpacity>
+      <TouchableOpacity
+        style={styles.buttonSecondary}
+        onPress={() => handleEventCar()}>
+        <Text style={{color: 'black'}}>Añadir Evento</Text>
       </TouchableOpacity>
     </View>
   );
@@ -66,23 +131,58 @@ const InfoCar = ({route, navigation}) => {
 export default InfoCar;
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    alignItems: 'center',
-    alignContent: 'center',
-    justifyContent: 'center',
-  },
+  container: {flex: 1, backgroundColor: 'white'},
   button: {
-    height: 40,
-    width: 200,
-    backgroundColor: '#A73F39',
-    alignItems: 'center',
-    alignContent: 'center',
+    alignSelf: 'center',
     justifyContent: 'center',
-    borderRadius: 20,
+    alignContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'black',
+    width: 200,
+    height: 50,
+    borderRadius: 10,
+    marginTop: 10,
   },
   containerText: {
-    flexDirection: 'row',
+    height: '30%',
     margin: 10,
+  },
+  containerImg: {height: '30%', width: '100%'},
+  image: {
+    flex: 1,
+    resizeMode: 'cover',
+  },
+  tittle: {
+    alignSelf: 'center',
+    marginTop: 20,
+    marginBottom: 20,
+    fontSize: 28,
+    lineHeight: 33,
+  },
+  flatlist: {
+    margin: 5,
+    flexGrow: 0,
+    height: 40,
+  },
+  placeholder: {
+    backgroundColor: '#F2F2F2',
+    margin: 10,
+    paddingLeft: 10,
+    paddingRight: 10,
+    width: '80%',
+  },
+  buttonSecondary: {
+    alignSelf: 'center',
+    justifyContent: 'center',
+    alignContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'white',
+    width: 200,
+    height: 50,
+    borderRadius: 10,
+    marginTop: 10,
+    borderStyle: 'solid',
+    borderBottomColor: 'black',
+    borderWidth: 2,
   },
 });

@@ -9,7 +9,6 @@ import {
 } from 'react-native';
 //FIREBASE
 import auth from '@react-native-firebase/auth';
-import database from '@react-native-firebase/database';
 import firestore from '@react-native-firebase/firestore';
 
 const WelcomeScreen = props => {

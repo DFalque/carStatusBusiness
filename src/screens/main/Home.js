@@ -13,19 +13,22 @@ const Home = props => {
 
   const changeState = e => {
     console.log(e);
-    //setUsername(e);
-    setUsername('oAgphnNeMsXEQiYGiJKzQILAWrW2');
+    setUsername(e);
+    //setUsername('oAgphnNeMsXEQiYGiJKzQILAWrW2');
     console.log(username);
   };
 
   const pressButton = () => {
     navigation.navigate('InfoCar', {
-      user: 'oAgphnNeMsXEQiYGiJKzQILAWrW2',
+      user: username,
     });
   };
   return (
-    <View style={{flex: 1}}>
-      <Text style={{margin: 10, fontSize: 20}}>Bienvenido a su perfil</Text>
+    <View style={{flex: 1, backgroundColor: 'white'}}>
+      <View style={styles.messageContainer}>
+        <Text style={styles.messageText}>Introduzca</Text>
+        <Text style={styles.messageText}>la matricula del vehículo</Text>
+      </View>
       <View style={styles.container}>
         <TextInput
           underlineColorAndroid="transparent"
@@ -52,19 +55,28 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   placeholder: {
-    backgroundColor: '#ECE6E6',
+    backgroundColor: '#F2F2F2',
     margin: 10,
     paddingLeft: 10,
     paddingRight: 10,
     width: 200,
   },
   button: {
-    height: 40,
-    width: 100,
-    backgroundColor: '#A73F39',
-    alignItems: 'center',
-    alignContent: 'center',
+    alignSelf: 'center',
     justifyContent: 'center',
-    borderRadius: 20,
+    alignContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'black',
+    width: 200,
+    height: 50,
+    borderRadius: 10,
+  },
+  messageContainer: {
+    height: '25%',
+    justifyContent: 'center',
+  },
+  messageText: {
+    fontSize: 28,
+    lineHeight: 33,
   },
 });

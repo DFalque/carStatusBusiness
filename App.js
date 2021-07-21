@@ -26,7 +26,6 @@ import {NavigationContainer} from '@react-navigation/native';
 import WelcomeScreen from './src/screens/login/WelcomeScreen';
 import Login from './src/screens/login//Login';
 import SignUp from './src/screens/login/SignUp';
-// FIREBASE
 import {firebase} from '@react-native-firebase/database';
 import firebaseConfig from './database/firebase';
 import auth from '@react-native-firebase/auth';
@@ -43,6 +42,7 @@ if (!firebase.apps.length) {
 // SCREENS MAIN
 import Home from './src/screens/main/Home';
 import InfoCar from './src/screens/main/InfoCar';
+import EventCar from './src/screens/main/EventCar'; // FIREBASE
 
 //CREATE LOGIN STACK
 const LoginStack = createStackNavigator();
@@ -76,6 +76,7 @@ const MainStackScreen = () => {
       tabBarOption={{}}>
       <LoginStack.Screen name="Home" component={Home} Options={{}} />
       <LoginStack.Screen name="InfoCar" component={InfoCar} Options={{}} />
+      <LoginStack.Screen name="EventCar" component={EventCar} Options={{}} />
     </MainStack.Navigator>
   );
 };
