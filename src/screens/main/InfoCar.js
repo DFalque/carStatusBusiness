@@ -162,7 +162,7 @@ const styles = StyleSheet.create({
   flatlist: {
     margin: 5,
     flexGrow: 0,
-    height: 40,
+    height: 50,
   },
   placeholder: {
     backgroundColor: '#F2F2F2',
