@@ -26,7 +26,6 @@ const InfoCar = ({route, navigation}) => {
   const [carInfo, setCarInfo] = useState({});
   const [idCar, setIdCar] = useState('');
   const [repairing, setRepairing] = useState(false);
-  const [notes, setNotes] = useState(['Esto es una nota', 'Esto es otra nota']);
 
   const user = route.params.user;
   const img = require('../../img/audi.jpg');
@@ -46,11 +45,6 @@ const InfoCar = ({route, navigation}) => {
         setCarInfo(car);
       });
   }, []);
-
-  const handleNotes = e => {
-    setNotes(e);
-    console.log(notes);
-  };
 
   const handleEventCar = () => {
     navigation.navigate('EventCar');
@@ -88,30 +82,22 @@ const InfoCar = ({route, navigation}) => {
       <View style={styles.containerImg}>
         <ImageBackground source={img} style={styles.image}></ImageBackground>
       </View>
-      <FlatList
-        style={styles.flatlist}
-        data={dataButtons}
-        horizontal={true}
-        renderItem={({item}) => <FlatListButton data={item} />}
-        keyExtractor={item => item.id}
-      />
-      <View style={styles.containerText}>
-        <Text>Introduce tus notas</Text>
-        <TextInput
-          placeholder="Nota ..."
-          style={styles.placeholder}
-          onChange={e => handleNotes()}
-        />
-        {notes.map(nota => (
-          <Text>{nota}</Text>
-        ))}
-      </View>
       <View
         style={{width: '80%', alignSelf: 'center', justifyContent: 'center'}}>
         {repairing ? (
-          <Progress.Bar progress={0.3} width={300} color={'red'} />
+          <Progress.Bar
+            style={{alignSelf: 'center', margin: 10}}
+            progress={0.3}
+            width={300}
+            color={'red'}
+          />
         ) : (
-          <Progress.Bar progress={1} width={300} color={'green'} />
+          <Progress.Bar
+            style={{alignSelf: 'center', margin: 10}}
+            progress={1}
+            width={300}
+            color={'green'}
+          />
         )}
       </View>
       <TouchableOpacity style={styles.button} onPress={() => changeStatus()}>

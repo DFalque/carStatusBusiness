@@ -11,6 +11,8 @@ import {
 import auth from '@react-native-firebase/auth';
 import firestore from '@react-native-firebase/firestore';
 
+const img = require('../../img/aliLogo.png');
+
 const WelcomeScreen = props => {
   const {navigation} = props;
   const [formData, setFormData] = useState(defaultFormValue());
@@ -57,31 +59,33 @@ const WelcomeScreen = props => {
   };
 
   return (
-    <View>
-      <View>
-        <Text>Registrate</Text>
+    <View style={styles.container}>
+      <View style={styles.imageContainer}>
+        <ImageBackground source={img} style={styles.image}></ImageBackground>
       </View>
       <View>
-        <View>
-          <Text>Registrate</Text>
-          <TextInput
-            underlineColorAndroid="transparent"
-            placeholder="Email"
-            placeholderTextColor="grey"
-            autoCapitalize="none"
-            onChangeText={e => onChange(e, 'email')}
-          />
-          <TextInput
-            //underlineColorAndroid="transparent"
-            placeholder="Contraseña"
-            placeholderTextColor="grey"
-            autoCapitalize="none"
-            secureTextEntry={true}
-            onChangeText={e => onChange(e, 'password')}
-          />
-
-          <TouchableOpacity onPress={() => onSubmit()}>
-            <Text> Submit </Text>
+        <View style={styles.submitContainer}>
+          <View style={styles.textInputContainer}>
+            <Text>Email</Text>
+            <TextInput
+              style={styles.textInput}
+              underlineColorAndroid="transparent"
+              placeholderTextColor="grey"
+              autoCapitalize="none"
+              onChangeText={e => onChange(e, 'email')}
+            />
+            <Text>Password</Text>
+            <TextInput
+              style={styles.textInput}
+              underlineColorAndroid="transparent"
+              placeholderTextColor="grey"
+              autoCapitalize="none"
+              secureTextEntry={true}
+              onChangeText={e => onChange(e, 'password')}
+            />
+          </View>
+          <TouchableOpacity style={styles.submit} onPress={() => onSubmit()}>
+            <Text style={styles.textSubmit}> Submit </Text>
           </TouchableOpacity>
         </View>
       </View>
@@ -94,8 +98,44 @@ export default WelcomeScreen;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    alignItems: 'center',
-    alignContent: 'center',
     justifyContent: 'center',
+    width: '100%',
+    backgroundColor: '#FFFF',
+  },
+  imageContainer: {
+    height: '40%',
+    backgroundColor: 'blue',
+  },
+  submitContainer: {
+    height: '60%',
+    alignItems: 'center',
+  },
+  textInputContainer: {
+    marginTop: 20,
+    marginBottom: 20,
+    width: '80%',
+  },
+  textInput: {
+    backgroundColor: '#F2F2F2',
+    marginBottom: 20,
+    borderRadius: 10,
+  },
+  submit: {
+    backgroundColor: '#000000',
+    width: 150,
+    height: 60,
+    borderRadius: 50,
+    justifyContent: 'center',
+    alignContent: 'center',
+    alignItems: 'center',
+  },
+  textSubmit: {
+    color: '#ffff',
+  },
+  image: {
+    flex: 1,
+    resizeMode: 'cover',
+    width: '100%',
+    height: '100%',
   },
 });
